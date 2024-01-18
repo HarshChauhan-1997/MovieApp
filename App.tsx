@@ -1,118 +1,105 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
   Text,
-  useColorScheme,
   View,
+  StyleSheet,
+  FlatList,
+  Image,
+  ScrollView,
 } from 'react-native';
+import List from './Componants/List/List';
+import Separator from './Componants/Seperator/Separator';
+import ScrollHeader from './Screen/ScrollHeader';
+import {useDispatch, useSelector} from 'react-redux';
+import {getTrendingMoviesStart} from './shared/actions/genreActions';
+const Home = () => {
+  const dispatch = useDispatch();
+  const {trendingMovies, isTrendingMoviesLoading} = useSelector(state => state?.moviesList);
+  
+  useEffect(() => {
+    // dispatch(getGenreStart());
+    dispatch(getTrendingMoviesStart());
+  }, []);
+  const genres = [
+    {
+      id: 28,
+      name: 'Movies',
+      data: trendingMovies,
+    },
+    {
+      id: 12,
+      name: 'Web-Series',
+      data: null,
+    },
+    {
+      id: 16,
+      name: 'Animation',
+      data: null,
+    },
+    {
+      id: 35,
+      name: 'Comedy',
+      data: null,
+    },
+    {
+      id: 80,
+      name: 'Crime',
+      data: null,
+    },
+    {
+      id: 99,
+      name: 'Documentary',
+      data: null,
+    },
+    {
+      id: 18,
+      name: 'Drama',
+      data: null,
+    },
+    {
+      id: 10751,
+      name: 'Family',
+      data: null,
+    },
+  ];
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+    <SafeAreaView style={style.main}>
+      <FlatList
+        data={genres}
+        ListHeaderComponent={ScrollHeader}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item, index}) => (
+          <>
+            <Separator />
+            <List title={item.name} movieList={item.data} isLoading={isTrendingMoviesLoading}/>
+          </>
+        )}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+export default Home;
+
+const style = StyleSheet.create({
+  main: {
+    display: 'flex',
+    height: 'auto',
+    borderRadius: 27,
+    backgroundColor: '#000',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  slider: {
+    width: 410,
+    height: 630,
+    borderRadius: 20,
+    opacity: 0.8,
+    resizeMode: 'cover',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  sep: {
+    width: 5,
+    height: 600,
+    backgroundColor: '#000',
   },
 });
-
-export default App;
