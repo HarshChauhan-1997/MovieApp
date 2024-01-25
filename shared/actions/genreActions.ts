@@ -28,8 +28,6 @@ export const getTrendingMoviesFailure = () => {
 
 //<----------MoviesStart----------->
 export const getTrendingAllStart = () => {
-  console.log("==Call==>");
-  
   return {type: TYPE.GET_TRENDING_ALL_START};
 };
 
@@ -39,4 +37,17 @@ export const getTrendingAllSuccess = (data: Genres) => {
 
 export const getTrendingAllFailure = () => {
   return {type: TYPE.GET_TRENDING_ALL_FAILURE};
+};
+
+//<----------SeriesStart----------->
+export const getTrendingSeriesStart = () => {
+  return {type: TYPE.GET_TRENDING_SERIES_START};
+};
+
+export const getTrendingSeriesSuccess = (data: Genres) => {
+  return {type: TYPE.GET_TRENDING_SERIES_SUCCESS, data};
+};
+
+export const getTrendingSeriesFailure = () => {
+  return {type: TYPE.GET_TRENDING_SERIES_FAILURE};
 };

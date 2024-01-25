@@ -12,14 +12,15 @@ import List from './Componants/List/List';
 import Separator from './Componants/Seperator/Separator';
 import ScrollHeader from './Screen/ScrollHeader';
 import {useDispatch, useSelector} from 'react-redux';
-import {getTrendingMoviesStart} from './shared/actions/genreActions';
+import {getTrendingMoviesStart, getTrendingSeriesStart} from './shared/actions/genreActions';
 const Home = () => {
   const dispatch = useDispatch();
-  const {trendingMovies, isTrendingMoviesLoading} = useSelector(state => state?.moviesList);
+  const {trendingMovies, isTrendingMoviesLoading, trendingSeries, isTrendingSeriesLoading} = useSelector(state => state?.moviesList);
   
   useEffect(() => {
     // dispatch(getGenreStart());
     dispatch(getTrendingMoviesStart());
+    dispatch(getTrendingSeriesStart())
   }, []);
   const genres = [
     {
@@ -30,7 +31,7 @@ const Home = () => {
     {
       id: 12,
       name: 'Web-Series',
-      data: null,
+      data: trendingSeries,
     },
     {
       id: 16,
@@ -64,6 +65,8 @@ const Home = () => {
     },
   ];
 
+  const isLoading = isTrendingMoviesLoading || isTrendingSeriesLoading
+
   return (
     <SafeAreaView style={style.main}>
       <FlatList
@@ -73,7 +76,7 @@ const Home = () => {
         renderItem={({item, index}) => (
           <>
             <Separator />
-            <List title={item.name} movieList={item.data} isLoading={isTrendingMoviesLoading}/>
+            <List title={item.name} movieList={item.data} isLoading={isLoading}/>
           </>
         )}
       />

@@ -3,43 +3,34 @@ import {headers} from '../../setup_api';
 import {Genres} from '../Types/Types';
 
 const getGenre = async () => {
-  const {data}: {data: Genres} = await axios.get(
+  return await axios.get(
     'https://api.themoviedb.org/3/genre/movie/list?language=en',
-    {
-      headers: headers,
-    },
+    {headers},
   );
-  return data;
 };
 
 const getTrendingAll = async () => {
-  console.log("call+++++----->>>>>>");
-  
-  const res: {data: any} = await axios.get(
+  return await axios.get(
     'https://api.themoviedb.org/3/trending/all/week?language=en-US',
-    {
-      headers: headers,
-    },
+    {headers},
   );
-  // console.log("==res==>",res);
-  return res;
 };
 
 const getTrendingMovies = async () => {
-  console.log("call+++++");
-  
-  const res: {data: any} = await axios.get(
-    'https://api.themoviedb.org/3/trending/movie/week',
-    {
-      headers: headers,
-    },
-  );
-  // console.log("==res==>",res);
-  return res;
+  return await axios.get('https://api.themoviedb.org/3/trending/movie/week', {
+    headers,
+  });
+};
+
+const getTrendingSeries = async () => {
+  return await axios.get('https://api.themoviedb.org/3/trending/tv/week', {
+    headers,
+  });
 };
 
 export const genreApi = {
   getGenre,
   getTrendingMovies,
-  getTrendingAll
+  getTrendingAll,
+  getTrendingSeries
 };

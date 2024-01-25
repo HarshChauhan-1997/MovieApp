@@ -2,16 +2,17 @@ import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, Image, StyleSheet, View} from 'react-native';
 import {getTrendingAllStart} from '../shared/actions/genreActions';
 import {useDispatch, useSelector} from 'react-redux';
+import { ShimmerPlaceholderComp } from '../Componants/Seperator/Shimmer';
 
 const ScrollHeader = () => {
   const dispatch = useDispatch();
-  const {trendingAll} = useSelector(state => state?.moviesList);
+  const {trendingAll, isTrendingAllLoading} = useSelector(
+    state => state?.moviesList,
+  );
+
   useEffect(() => {
-    console.log("==----===>");
-    // dispatch(getGenreStart());
     dispatch(getTrendingAllStart());
   }, []);
-  console.log('==trendingAll==>', trendingAll);
 
   const [isSlide, setIsSlide] = useState(true);
   const fatalistRef = useRef(null);
@@ -19,15 +20,14 @@ const ScrollHeader = () => {
     url: 'https://image.tmdb.org/t/p/original/69YuvoiWTtK6oyYH2Jl4Q6SgZ59.jpg',
     id: '0',
   };
-  const imgArray = [img, img, img, img];
 
   useEffect(() => {
     let currIndex = 0;
     const interval = setInterval(() => {
       if (
         trendingAll
-          ? currIndex >= trendingAll?.data?.results?.length
-          : currIndex >= imgArray.length
+          ? currIndex >= trendingAll?.results?.length
+          : currIndex >= 10
       )
         currIndex = 0;
       fatalistRef?.current?.scrollToIndex({
@@ -39,34 +39,43 @@ const ScrollHeader = () => {
     return () => clearInterval(interval);
   }, [trendingAll]);
 
-  const itemSeparator = () => {
-    return <View style={style.sep} />;
-  };
+  // const itemSeparator = () => {
+  //   return <View style={style.sep} />;
+  // };
   return (
-    <FlatList
-      scrollEnabled={isSlide}
-      onMomentumScrollBegin={() => setIsSlide(false)}
-      onMomentumScrollEnd={() => setIsSlide(true)}
-      ItemSeparatorComponent={itemSeparator}
-      horizontal
-      ref={fatalistRef}
-      data={trendingAll ? trendingAll?.data?.results : imgArray}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={({item, index}) => {
-        return (
-          <>
-            <Image
-              style={style.slider}
-              source={{
-                uri: trendingAll
-                  ? `https://image.tmdb.org/t/p/original${item?.poster_path}`
-                  : item?.url,
-              }}
-            />
-          </>
-        );
-      }}
-    />
+    <>
+      {isTrendingAllLoading ? (
+        <ShimmerPlaceholderComp length={10} style={style.sliderShimm}/>
+      ) : (
+        <>
+          <FlatList
+            style={{marginHorizontal: 5, marginVertical: 5}}
+            scrollEnabled={isSlide}
+            onMomentumScrollBegin={() => setIsSlide(false)}
+            onMomentumScrollEnd={() => setIsSlide(true)}
+            // ItemSeparatorComponent={itemSeparator}
+            horizontal
+            ref={fatalistRef}
+            data={trendingAll && trendingAll?.results}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item, index}) => {
+              return (
+                <>
+                  <Image
+                    style={style.slider}
+                    source={{
+                      uri: trendingAll
+                        ? `https://image.tmdb.org/t/p/original${item?.poster_path}`
+                        : item?.url,
+                    }}
+                  />
+                </>
+              );
+            }}
+          />
+        </>
+      )}
+    </>
   );
 };
 
@@ -84,5 +93,14 @@ const style = StyleSheet.create({
     width: 5,
     height: 600,
     backgroundColor: '#000',
+  },
+  sliderShimm: {
+    width: 400,
+    height: 620,
+    borderRadius: 20,
+    opacity: 0.8,
+    resizeMode: 'cover',
+    marginHorizontal:5,
+    marginVertical:5,
   },
 });

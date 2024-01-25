@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
-import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
+import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
+import LinearGradient from 'react-native-linear-gradient';
+import { ShimmerPlaceholderComp } from '../Seperator/Shimmer';
 
 const List = ({title, movieList, isLoading}) => {
   const img = {
@@ -9,24 +11,20 @@ const List = ({title, movieList, isLoading}) => {
   };
   const imgArray = [img, img, img, img];
   const itemSeparator = () => <View style={style.sep} />;
+  const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
+  // const LinearGradient = () => <View></View>
   return (
     <View>
       <View>
         <Text style={style.title}>{title}</Text>
       </View>
       {isLoading ? (
-        Array(4).map((_, index) => (
-          <ShimmerPlaceholder
-            key={index}
-            style={style.poster}
-            duration={1000} // Adjust the duration in milliseconds
-          />
-        ))
+        <ShimmerPlaceholderComp length={10} style={style.posterShim}/>
       ) : (
         <FlatList
           ItemSeparatorComponent={itemSeparator}
           horizontal
-          data={movieList && movieList?.data?.results}
+          data={movieList && movieList?.results}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => (
             <>
@@ -67,5 +65,12 @@ const style = StyleSheet.create({
     width: 5,
     height: 210,
     backgroundColor: '#000',
+  },
+  posterShim: {
+    width: 140,
+    height: 210,
+    borderRadius: 15,
+    resizeMode: 'cover',
+    marginHorizontal:5,
   },
 });

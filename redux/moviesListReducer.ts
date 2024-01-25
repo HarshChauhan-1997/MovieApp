@@ -6,11 +6,13 @@ interface Action {
 }
 
 interface Movies {
-  genresData: object | null,
-  isTrendingAllLoading: boolean,
-  trendingAll: object | null,
-  isTrendingMoviesLoading: boolean,
-  trendingMovies: object | null,
+  genresData: object | null;
+  isTrendingAllLoading: boolean;
+  trendingAll: object | null;
+  isTrendingMoviesLoading: boolean;
+  trendingMovies: object | null;
+  isTrendingSeriesLoading: boolean;
+  trendingSeries: object | null;
 }
 
 const moviesList: Movies = {
@@ -19,6 +21,8 @@ const moviesList: Movies = {
   trendingAll: null,
   isTrendingMoviesLoading: false,
   trendingMovies: null,
+  isTrendingSeriesLoading: false,
+  trendingSeries: null,
 };
 
 export default (state = moviesList, action: Action) => {
@@ -33,18 +37,31 @@ export default (state = moviesList, action: Action) => {
     case TYPE.GET_TRENDING_ALL_START:
       return {...state, isTrendingAllLoading: true};
     case TYPE.GET_TRENDING_ALL_SUCCESS:
-      console.log("==action: trendingAll==>", action.data);
       return {...state, trendingAll: action?.data, isTrendingAllLoading: false};
     case TYPE.GET_TRENDING_ALL_FAILURE:
       return {...state, isTrendingAllLoading: false};
 
     case TYPE.GET_TRENDING_MOVIES_START:
-      return {...state,isTrendingMoviesLoading: true};
+      return {...state, isTrendingMoviesLoading: true};
     case TYPE.GET_TRENDING_MOVIES_SUCCESS:
-      console.log("==action: trendingMovies==>", action.data);
-      return {...state, trendingMovies: action.data, isTrendingMoviesLoading: false};
+      return {
+        ...state,
+        trendingMovies: action.data,
+        isTrendingMoviesLoading: false,
+      };
     case TYPE.GET_TRENDING_MOVIES_FAILURE:
       return {...state, isTrendingMoviesLoading: false};
+
+    case TYPE.GET_TRENDING_SERIES_START:
+      return {...state, isTrendingSeriesLoading: true};
+    case TYPE.GET_TRENDING_SERIES_SUCCESS:
+      return {
+        ...state,
+        trendingSeries: action.data,
+        isTrendingSeriesLoading: false,
+      };
+    case TYPE.GET_TRENDING_SERIES_FAILURE:
+      return {...state, isTrendingSeriesLoading: false};
 
     default:
       return {...state};
