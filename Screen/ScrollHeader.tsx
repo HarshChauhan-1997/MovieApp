@@ -1,8 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {memo, useEffect, useRef, useState} from 'react';
 import {FlatList, Image, StyleSheet, View} from 'react-native';
 import {getTrendingAllStart} from '../shared/actions/genreActions';
 import {useDispatch, useSelector} from 'react-redux';
-import { ShimmerPlaceholderComp } from '../Componants/Seperator/Shimmer';
+import {ShimmerPlaceholderComp} from '../Componants/Seperator/Shimmer';
+import {hp, wp} from '../shared/utils/responsiv';
 
 const ScrollHeader = () => {
   const dispatch = useDispatch();
@@ -16,20 +17,17 @@ const ScrollHeader = () => {
 
   const [isSlide, setIsSlide] = useState(true);
   const fatalistRef = useRef(null);
-  const img = {
-    url: 'https://image.tmdb.org/t/p/original/69YuvoiWTtK6oyYH2Jl4Q6SgZ59.jpg',
-    id: '0',
-  };
 
   useEffect(() => {
     let currIndex = 0;
     const interval = setInterval(() => {
       if (
         trendingAll
-          ? currIndex >= trendingAll?.results?.length
-          : currIndex >= 10
-      )
+          ? currIndex === trendingAll?.results?.length - 1
+          : currIndex === 5
+      ) {
         currIndex = 0;
+      }
       fatalistRef?.current?.scrollToIndex({
         animated: true,
         index: currIndex,
@@ -39,21 +37,25 @@ const ScrollHeader = () => {
     return () => clearInterval(interval);
   }, [trendingAll]);
 
-  // const itemSeparator = () => {
-  //   return <View style={style.sep} />;
-  // };
+  const itemSeparator = () => {
+    return <View style={style.sep} />;
+  };
   return (
     <>
       {isTrendingAllLoading ? (
-        <ShimmerPlaceholderComp length={10} style={style.sliderShimm}/>
+        <ShimmerPlaceholderComp
+          length={10}
+          style={style.sliderShimm}
+          shimDirection={style.shimDirection}
+        />
       ) : (
         <>
           <FlatList
-            style={{marginHorizontal: 5, marginVertical: 5}}
+            style={{marginLeft: wp(2.5), marginVertical: hp(1.5)}}
             scrollEnabled={isSlide}
             onMomentumScrollBegin={() => setIsSlide(false)}
             onMomentumScrollEnd={() => setIsSlide(true)}
-            // ItemSeparatorComponent={itemSeparator}
+            ItemSeparatorComponent={itemSeparator}
             horizontal
             ref={fatalistRef}
             data={trendingAll && trendingAll?.results}
@@ -79,28 +81,32 @@ const ScrollHeader = () => {
   );
 };
 
-export default ScrollHeader;
+export default memo(ScrollHeader);
 
 const style = StyleSheet.create({
   slider: {
-    width: 400,
-    height: 620,
+    width: wp(95),
+    height: hp(80),
     borderRadius: 20,
     opacity: 0.8,
     resizeMode: 'cover',
   },
   sep: {
-    width: 5,
-    height: 600,
+    width: wp(3),
+    height: hp(50),
     backgroundColor: '#000',
   },
   sliderShimm: {
-    width: 400,
-    height: 620,
+    width: wp(95),
+    height: hp(80),
     borderRadius: 20,
     opacity: 0.8,
     resizeMode: 'cover',
-    marginHorizontal:5,
-    marginVertical:5,
+    marginHorizontal: 5,
+    marginVertical: 5,
+  },
+  shimDirection: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 });

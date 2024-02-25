@@ -1,7 +1,7 @@
 import {all, call, put, takeLatest} from 'redux-saga/effects';
 import {genreApi} from '../../shared/actionApi/genreApi';
-import { Genres } from '../../shared/Types/Types';
-import { TYPE } from '../../shared/actions/actions';
+import {Genres} from '../../shared/Types/Types';
+import {TYPE} from '../../shared/actions/actions';
 
 function* getGenreStart() {
   try {
@@ -39,11 +39,34 @@ function* getTrendingSeries() {
   }
 }
 
+function* getMoviesByGenres() {
+  try {
+    const data = yield call(genreApi.getMoviesByGenres);
+    console.log('==data new==>', data);
+    yield put({type: TYPE.GET_MOVIES_BY_GENRES_SUCCESS, data});
+  } catch (error) {
+    yield put({type: TYPE.GET_MOVIES_BY_GENRES_FAILURE, data: error});
+  }
+}
+
+function* getDataBySearch(action: {type: string; data: string}) {
+  try {
+    const {data} = yield call(genreApi.getDataBySearch, action.data);
+    yield put({type: TYPE.GET_DATA_BY_SEARCH_SUCCESS, data});
+  } catch (error) {
+    yield put({type: TYPE.GET_DATA_BY_SEARCH_FAILURE, data: error});
+  }
+}
+
 function* genreSaga() {
-  yield all([takeLatest(TYPE.GET_GENRE_START, getGenreStart),
+  yield all([
+    takeLatest(TYPE.GET_GENRE_START, getGenreStart),
     takeLatest(TYPE.GET_TRENDING_MOVIES_START, getTrendingMovies),
     takeLatest(TYPE.GET_TRENDING_ALL_START, getTrendingAll),
-  takeLatest(TYPE.GET_TRENDING_SERIES_START, getTrendingSeries)]);
+    takeLatest(TYPE.GET_TRENDING_SERIES_START, getTrendingSeries),
+    takeLatest(TYPE.GET_MOVIES_BY_GENRES, getMoviesByGenres),
+    takeLatest(TYPE.GET_DATA_BY_SEARCH, getDataBySearch),
+  ]);
 }
 
 export default genreSaga;
