@@ -23,6 +23,8 @@ interface Movies {
   isMoviesByGenresLoading: boolean;
   searchData: object | null;
   isDataBySearchLoading: boolean;
+  movieByID: object | null;
+  isMovieByIDLoading: boolean;
 }
 
 const moviesList: Movies = {
@@ -38,6 +40,8 @@ const moviesList: Movies = {
   isMoviesByGenresLoading: false,
   searchData: null,
   isDataBySearchLoading: false,
+  movieByID: null,
+  isMovieByIDLoading: false,
 };
 
 export default (state = moviesList, action: Action) => {
@@ -61,7 +65,7 @@ export default (state = moviesList, action: Action) => {
     case TYPE.GET_TRENDING_MOVIES_SUCCESS:
       return {
         ...state,
-        trendingMovies: action.data,
+        trendingMovies: action?.data,
         isTrendingMoviesLoading: false,
       };
     case TYPE.GET_TRENDING_MOVIES_FAILURE:
@@ -72,7 +76,7 @@ export default (state = moviesList, action: Action) => {
     case TYPE.GET_TRENDING_SERIES_SUCCESS:
       return {
         ...state,
-        trendingSeries: action.data,
+        trendingSeries: action?.data,
         isTrendingSeriesLoading: false,
       };
     case TYPE.GET_TRENDING_SERIES_FAILURE:
@@ -82,6 +86,8 @@ export default (state = moviesList, action: Action) => {
       return {...state, isMoviesByGenresLoading: true};
     case TYPE.GET_MOVIES_BY_GENRES_SUCCESS:
       const genres = [
+        'Movies',
+        'Web-Series',
         'Action',
         'Adventure',
         'Animation',
@@ -100,15 +106,20 @@ export default (state = moviesList, action: Action) => {
         'TV Movie',
         'Thriller',
         'War',
-        'Western'
+        'Western',
       ];
+
+      const List = genres.map((title, index) => {
+        return {title, data: action?.data[index].data.results};
+      });
       // const moviesByGenres = action.data.map((genreData, index) => ({
       //   data: genreData.data,
       //   name: Genres[genres[index]],
       // }));
+      
       return {
         ...state,
-        moviesByGenres: action?.data,
+        moviesByGenres: List,
         isMoviesByGenresLoading: false,
       };
     case TYPE.GET_MOVIES_BY_GENRES_FAILURE:
@@ -119,11 +130,22 @@ export default (state = moviesList, action: Action) => {
     case TYPE.GET_DATA_BY_SEARCH_SUCCESS:
       return {
         ...state,
-        searchData: action.data,
+        searchData: action?.data,
         isDataBySearchLoading: false,
       };
     case TYPE.GET_DATA_BY_SEARCH_FAILURE:
       return {...state, isDataBySearchLoading: false};
+
+    case TYPE.GET_MOVIE_BY_ID:
+      return {...state, isMovieByIDLoading: true};
+    case TYPE.GET_MOVIE_BY_ID_SUCCESS:
+      return {
+        ...state,
+        movieByID: action?.data,
+        isMovieByIDLoading: false,
+      };
+    case TYPE.GET_MOVIE_BY_ID_FAILURE:
+      return {...state, isMovieByIDLoading: false};
 
     default:
       return {...state};

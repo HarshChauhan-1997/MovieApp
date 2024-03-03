@@ -1,6 +1,7 @@
 import axios from 'axios';
-import {headers} from '../../setup_api';
+import {headers} from '../../../setup_api';
 import {Genres} from '../Types/Types';
+import _ from 'lodash';
 
 const getGenre = async () => {
   return await axios.get(
@@ -29,7 +30,6 @@ const getTrendingSeries = async () => {
 };
 
 const getMoviesByGenres = async () => {
-
   const genres = [
     28, 12, 16, 35, 80, 99, 18, 10751, 14, 36, 27, 10402, 9648, 10749, 878,
     10770, 53, 10752, 37,
@@ -38,21 +38,27 @@ const getMoviesByGenres = async () => {
   const genreRequests = genres.map(genreId =>
     axios.get(
       `https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${genreId}`,
-      {headers}
+      {headers},
     ),
   );
 
+  const moviesTrending = axios.get(
+    'https://api.themoviedb.org/3/trending/movie/week',
+    {
+      headers,
+    },
+  );
+
+  const webSeries = axios.get('https://api.themoviedb.org/3/trending/tv/week', {
+    headers,
+  });
+
   try {
     const responses = await axios.all(genreRequests);
-    // const moviesByGenres = genres.reduce((acc, genreId, index) => {
-    //   acc[genres[genreId]] = responses[index];
-    //   return acc;
-    // });
+    const Movies_Series = await axios.all([moviesTrending, webSeries]);
+    const AllData = _.concat(Movies_Series, responses);
 
-    // console.log("==main Api==>", moviesByGenres);
-    
-
-    return responses;
+    return AllData;
   } catch (error) {
     console.error('= = Error fetching movies by genres: = = >', error);
     throw error;
@@ -68,6 +74,15 @@ const getDataBySearch = async (data: string) => {
   );
 };
 
+const getMoviesByID = async (id: number) => {
+  return await axios.get(
+    `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
+    {
+      headers,
+    },
+  );
+};
+
 export const genreApi = {
   getGenre,
   getTrendingMovies,
@@ -75,4 +90,5 @@ export const genreApi = {
   getTrendingSeries,
   getMoviesByGenres,
   getDataBySearch,
+  getMoviesByID,
 };

@@ -27,7 +27,7 @@ const ListVertical = ({title, movieList, isLoading}: ListProps) => {
       ) : (
         <FlatList
           ItemSeparatorComponent={itemSeparator}
-          data={movieList && movieList?.results}
+          data={movieList && movieList}
           numColumns={3}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => (

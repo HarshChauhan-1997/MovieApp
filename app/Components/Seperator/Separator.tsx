@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
+import { hp } from '../../shared/utils/responsiv';
 
 const Separator = () => {
   return (
@@ -13,7 +14,7 @@ export default Separator;
 
 const style = StyleSheet.create({
   sep: {
-    marginTop: 10,
+    marginTop: hp(2.5),
     width: 200,
     height: 3,
     borderRadius: 10,

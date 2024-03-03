@@ -42,7 +42,6 @@ function* getTrendingSeries() {
 function* getMoviesByGenres() {
   try {
     const data = yield call(genreApi.getMoviesByGenres);
-    console.log('==data new==>', data);
     yield put({type: TYPE.GET_MOVIES_BY_GENRES_SUCCESS, data});
   } catch (error) {
     yield put({type: TYPE.GET_MOVIES_BY_GENRES_FAILURE, data: error});
@@ -58,6 +57,15 @@ function* getDataBySearch(action: {type: string; data: string}) {
   }
 }
 
+function* getMovieByID(action: {type: string; data: number}) {
+  try {
+    const {data} = yield call(genreApi.getMoviesByID, action?.data);
+    yield put({type: TYPE.GET_MOVIE_BY_ID_SUCCESS, data});
+  } catch (error) {
+    yield put({type: TYPE.GET_MOVIE_BY_ID_FAILURE, data: error});
+  }
+}
+
 function* genreSaga() {
   yield all([
     takeLatest(TYPE.GET_GENRE_START, getGenreStart),
@@ -66,6 +74,7 @@ function* genreSaga() {
     takeLatest(TYPE.GET_TRENDING_SERIES_START, getTrendingSeries),
     takeLatest(TYPE.GET_MOVIES_BY_GENRES, getMoviesByGenres),
     takeLatest(TYPE.GET_DATA_BY_SEARCH, getDataBySearch),
+    takeLatest(TYPE.GET_MOVIE_BY_ID, getMovieByID),
   ]);
 }
 
