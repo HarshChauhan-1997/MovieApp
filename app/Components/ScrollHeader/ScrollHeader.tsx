@@ -1,9 +1,9 @@
 import React, {memo, useEffect, useRef, useState} from 'react';
 import {FlatList, Image, StyleSheet, View} from 'react-native';
-import {getTrendingAllStart} from '../shared/actions/genreActions';
+import {getTrendingAllStart} from '../../shared/actions/genreActions';
 import {useDispatch, useSelector} from 'react-redux';
-import {ShimmerPlaceholderComp} from '../Componants/Seperator/Shimmer';
-import {hp, wp} from '../shared/utils/responsiv';
+import {ShimmerPlaceholderComp} from '../Seperator/Shimmer';
+import {hp, wp} from '../../shared/utils/responsiv';
 
 const ScrollHeader = () => {
   const dispatch = useDispatch();
