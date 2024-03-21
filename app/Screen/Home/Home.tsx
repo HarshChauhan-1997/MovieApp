@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -16,11 +16,11 @@ import {
 } from '../../shared/actions/genreActions';
 import _ from 'lodash';
 import SearchBar from '../../Components/SearchBar/SearchBar';
-import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import {hp, wp} from '../../shared/utils/responsiv';
 import {genres} from '../../shared/utils/globalUse';
 import {FlatList} from 'react-native-gesture-handler';
 import Separator from '../../Components/Seperator/Separator';
+import ListVertical from '../../Components/List/ListVertical';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -45,32 +45,34 @@ const Home = () => {
       ? (setIsSearch(true), dispatch(getDataBySearch(data.replace(/ /g, '-'))))
       : setIsSearch(false);
   };
-  console.log("==searchData==>", searchData);
-  
 
   return (
     <SafeAreaView style={style.main}>
       <SearchBar searchInputData={searchInputData} />
       <FlatList
-        ListHeaderComponent={searchData === null ? <ScrollHeader /> : <></>}
-        data={searchData ? searchData?.results : moviesByGenres}
+        ListHeaderComponent={!isSearch ? <ScrollHeader /> : <></>}
+        data={isSearch ? [searchData] : moviesByGenres}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => (
-          <>
-            <List
-              title={item?.title}
-              movieList={item?.data}
-              isLoading={isLoading}
-            />
-            <Separator />
-          </>
-        )}
+        renderItem={({item, index}) =>
+        !isSearch ? (
+            <>
+              <List
+                title={item?.title}
+                movieList={item?.data}
+                isLoading={isLoading}
+              />
+              <Separator />
+            </>
+          ) : (
+            <ListVertical movieList={item} isLoading={isLoading}/>
+          )
+        }
       />
     </SafeAreaView>
   );
 };
 
-export default memo(Home);
+export default Home;
 
 const style = StyleSheet.create({
   main: {

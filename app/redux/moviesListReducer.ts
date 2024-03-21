@@ -136,17 +136,6 @@ export default (state = moviesList, action: Action) => {
     case TYPE.GET_DATA_BY_SEARCH_FAILURE:
       return {...state, isDataBySearchLoading: false};
 
-    case TYPE.GET_MOVIE_BY_ID:
-      return {...state, isMovieByIDLoading: true};
-    case TYPE.GET_MOVIE_BY_ID_SUCCESS:
-      return {
-        ...state,
-        movieByID: action?.data,
-        isMovieByIDLoading: false,
-      };
-    case TYPE.GET_MOVIE_BY_ID_FAILURE:
-      return {...state, isMovieByIDLoading: false};
-
     default:
       return {...state};
   }

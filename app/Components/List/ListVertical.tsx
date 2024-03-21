@@ -1,6 +1,8 @@
 import React from 'react';
-import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Image, ImageBackground, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
 import {ShimmerPlaceholderComp} from '../Seperator/Shimmer';
+import { hp, rpFont, wp } from '../../shared/utils/responsiv';
+import { useNavigation } from '@react-navigation/native';
 
 interface ListProps {
   title?: string;
@@ -10,6 +12,7 @@ interface ListProps {
 
 const ListVertical = ({title, movieList, isLoading}: ListProps) => {
   const itemSeparator = () => <View style={style.sepVertical} />;
+  const navigation = useNavigation();
 
   return (
     <View>
@@ -27,21 +30,71 @@ const ListVertical = ({title, movieList, isLoading}: ListProps) => {
       ) : (
         <FlatList
           ItemSeparatorComponent={itemSeparator}
-          data={movieList && movieList}
-          numColumns={3}
+          data={movieList && movieList?.results}
+          numColumns={2}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => (
             <>
-              {item?.poster_path || item?.profile_path ? (
-                <Image
-                  style={style.posterVertical}
+              <TouchableWithoutFeedback
+                onPress={() => navigation.navigate('Movie', {id: item?.id})}>
+                <ImageBackground
+                  style={style.poster}
                   source={{
                     uri: item?.poster_path
                       ? `https://image.tmdb.org/t/p/original${item?.poster_path}`
                       : `https://image.tmdb.org/t/p/original${item?.profile_path}`,
-                  }}
-                />
-              ) : null}
+                  }}>
+                  <View
+                    style={{
+                      width: wp(10),
+                      height: hp(5),
+                      zIndex: 1,
+                      top: hp(1.8),
+                      right: wp(2),
+                      backgroundColor: '#000',
+                      position: 'absolute',
+                      opacity: 0.3,
+                      borderRadius: 10,
+                    }}></View>
+                  <Image
+                    style={{
+                      width: wp(4.3),
+                      height: hp(2.5),
+                      top: hp(1.7),
+                      right: wp(2.9),
+                      position: 'absolute',
+                      zIndex: 1,
+                    }}
+                    source={{uri: 'https://img.icons8.com/color/48/imdb.png'}}
+                  />
+                  <Image
+                    style={{
+                      width: wp(2.5),
+                      height: hp(1.5),
+                      top: hp(4.5),
+                      right: wp(8),
+                      position: 'absolute',
+                      zIndex: 1,
+                    }}
+                    source={{
+                      uri: 'https://img.icons8.com/fluency/48/star--v1.png',
+                    }}
+                  />
+                  <Text
+                    style={{
+                      color: '#FFF',
+                      fontSize: rpFont(1.5),
+                      fontWeight: '700',
+                      fontFamily: 'Lato',
+                      top: wp(9),
+                      right: hp(1.5),
+                      position: 'absolute',
+                      zIndex: 1,
+                    }}>
+                    {Number(item?.vote_average?.toFixed(1))}
+                  </Text>
+                </ImageBackground>
+              </TouchableWithoutFeedback>
             </>
           )}
         />
@@ -73,15 +126,25 @@ const style = StyleSheet.create({
     backgroundColor: '#000',
   },
   posterShim: {
-    width: 140,
-    height: 210,
-    borderRadius: 15,
+    width: wp(48),
+    height: hp(35),
+    borderRadius: wp(5),
     resizeMode: 'cover',
-    marginHorizontal: 5,
+    overflow: 'hidden',
+    marginHorizontal: wp(1),
+    marginVertical: hp(0.5)
   },
   shimDirectionV: {
     display: 'flex',
     flexDirection: 'column',
     marginBottom: 5,
+  },
+  poster: {
+    width: wp(48),
+    height: hp(35),
+    borderRadius: wp(5),
+    resizeMode: 'cover',
+    overflow: 'hidden',
+    marginHorizontal: wp(1),
   },
 });

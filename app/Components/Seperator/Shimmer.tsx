@@ -1,18 +1,25 @@
 import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
-import { View } from 'react-native';
+import {View} from 'react-native';
 import React from 'react';
+import {FlatList} from 'react-native-gesture-handler';
 
 export const ShimmerPlaceholderComp = ({length, style, shimDirection}) => {
-    const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
-    return (
-        <View style={shimDirection}>
-          {Array.from({length: length}).map((_, index) => (
-            <ShimmerPlaceholder key={index} style={style}/>
-          ))}
-        </View>
-    )
-}
+  const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
+
+  return (
+    <View style={shimDirection}>
+      <FlatList
+        data={Array.from({length: length})}
+        numColumns={2}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item, index}) => (
+          <ShimmerPlaceholder key={index} style={style} />
+        )}
+      />
+    </View>
+  );
+};
 
 // export const ShimmerPlaceholderComp = ({ length, style, shimDirection }) => {
 //   const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);

@@ -1,28 +1,23 @@
 import React, {useEffect} from 'react';
-import {Text} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
-import {getMovieByID} from '../../shared/actions/genreActions';
+import {VideoPlayerComp} from '../../Components/VideoPlayer/VideoPlayer';
+import {hp, wp} from '../../shared/utils/responsiv';
+import DetailComp from '../../Components/DetailComp/DetailComp';
 
 const Movie = () => {
   const route = useRoute();
-  const {id} = route?.params;
-  const dispatch = useDispatch();
-  const {movieByID, isMovieByIDLoading} = useSelector(
-    state => state?.moviesList,
+  // const {id} = route?.params;
+  const id = "1726"
+  // console.log('==id===>', id);
+
+  return (
+    <View style={{backgroundColor: '#000', flex: 1 }}>
+      <VideoPlayerComp id={id} />
+      <DetailComp id={id} />
+    </View>
   );
-  movieByID &&
-    console.log(
-      '==movieByID, isMovieByIDLoading==>',
-      movieByID,
-      isMovieByIDLoading,
-    );
-
-  useEffect(() => {
-    id && dispatch(getMovieByID(id));
-  }, [id]);
-
-  return <Text>Movie</Text>;
 };
 
 export default Movie;

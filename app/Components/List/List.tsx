@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -117,7 +117,7 @@ const List = ({movieList, isLoading, title, id}: ListProps) => {
   );
 };
 
-export default memo(List);
+export default List;
 
 const style = StyleSheet.create({
   title: {

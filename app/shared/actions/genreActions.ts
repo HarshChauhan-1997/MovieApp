@@ -77,16 +77,3 @@ export const getDataBySearchSuccess = (data: Genres) => {
 export const getDataBySearchFailure = () => {
   return {type: TYPE.GET_DATA_BY_SEARCH_FAILURE};
 };
-
-//<----------GetMovieByID----------->
-export const getMovieByID = (data: number) => {
-  return {type: TYPE.GET_MOVIE_BY_ID, data};
-};
-
-export const getMovieByIDSuccess = (data: any) => {
-  return {type: TYPE.GET_MOVIE_BY_ID_SUCCESS, data};
-};
-
-export const getMovieByIDFailure = () => {
-  return {type: TYPE.GET_MOVIE_BY_ID_FAILURE};
-};
