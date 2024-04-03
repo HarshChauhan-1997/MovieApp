@@ -11,7 +11,7 @@ export const ShimmerPlaceholderComp = ({length, style, shimDirection}) => {
     <View style={shimDirection}>
       <FlatList
         data={Array.from({length: length})}
-        numColumns={2}
+        horizontal
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => (
           <ShimmerPlaceholder key={index} style={style} />

@@ -2,22 +2,26 @@ import axios from 'axios';
 import {headers} from '../../../setup_api';
 import _ from 'lodash';
 
-const getCast = async (id: number) => {
+const getCast = async ({id, title}) => {
   return await axios.get(
-    `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
+    `https://api.themoviedb.org/3/${
+      title === 'Web-Series' ? 'tv' : 'movie'
+    }/${id}/credits?language=en-US`,
     {headers},
   );
 };
 
-const getTrailer = async (id: number) => {
+const getTrailer = async ({id, title}) => {
+  const type = title === 'Web-Series' ? 'tv' : 'movie';
+
   try {
     const trailerHI = await axios.get(
-      `https://api.themoviedb.org/3/movie/${id}/videos?language=hi-IN`,
+      `https://api.themoviedb.org/3/${type}/${id}/videos?language=hi-IN`,
       {headers},
     );
 
     const trailerAll = await axios.get(
-      `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`,
+      `https://api.themoviedb.org/3/${type}/${id}/videos?language=en-US`,
       {headers},
     );
 
@@ -48,15 +52,22 @@ const getTrailer = async (id: number) => {
   }
 };
 
-const getImages = async (id: number) => {
-  return await axios.get(`https://api.themoviedb.org/3/movie/${id}/images`, {
-    headers,
-  });
+const getImages = async ({id, title}) => {
+  return await axios.get(
+    `https://api.themoviedb.org/3/${
+      title === 'Web-Series' ? 'tv' : 'movie'
+    }/${id}/images`,
+    {
+      headers,
+    },
+  );
 };
 
-const getDetails = async (id: number) => {
+const getDetails = async ({id, title}) => {
   return await axios.get(
-    `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
+    `https://api.themoviedb.org/3/${
+      title === 'Web-Series' ? 'tv' : 'movie'
+    }/${id}?language=en-US`,
     {headers},
   );
 };
