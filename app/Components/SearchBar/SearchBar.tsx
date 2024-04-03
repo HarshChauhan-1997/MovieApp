@@ -17,7 +17,7 @@ const SearchBar = ({searchInputData}: SearchProps) => {
     clearTimeout(typingTimeout);
     typingTimeout = setTimeout(() => {
       searchInputData(data);
-    }, 300);
+    }, 100);
   };
 
   return (

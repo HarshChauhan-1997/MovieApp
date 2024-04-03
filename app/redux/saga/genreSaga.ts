@@ -1,6 +1,5 @@
 import {all, call, put, takeLatest} from 'redux-saga/effects';
 import {genreApi} from '../../shared/actionApi/genreApi';
-import {Genres} from '../../shared/Types/Types';
 import {TYPE} from '../../shared/actions/actions';
 
 function* getGenreStart() {
@@ -57,15 +56,6 @@ function* getDataBySearch(action: {type: string; data: string}) {
   }
 }
 
-function* getMovieByID(action: {type: string; data: number}) {
-  try {
-    const {data} = yield call(genreApi.getMoviesByID, action?.data);
-    yield put({type: TYPE.GET_MOVIE_BY_ID_SUCCESS, data});
-  } catch (error) {
-    yield put({type: TYPE.GET_MOVIE_BY_ID_FAILURE, data: error});
-  }
-}
-
 function* genreSaga() {
   yield all([
     takeLatest(TYPE.GET_GENRE_START, getGenreStart),
@@ -74,7 +64,6 @@ function* genreSaga() {
     takeLatest(TYPE.GET_TRENDING_SERIES_START, getTrendingSeries),
     takeLatest(TYPE.GET_MOVIES_BY_GENRES, getMoviesByGenres),
     takeLatest(TYPE.GET_DATA_BY_SEARCH, getDataBySearch),
-    takeLatest(TYPE.GET_MOVIE_BY_ID, getMovieByID),
   ]);
 }
 

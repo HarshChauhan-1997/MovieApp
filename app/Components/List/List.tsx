@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -21,7 +21,7 @@ interface ListProps {
   title?: number | any;
 }
 
-const List = ({movieList, isLoading, title, id}: ListProps) => {
+const List = ({movieList, isLoading, title}: ListProps) => {
   const navigation = useNavigation();
   const layout = useWindowDimensions();
   const itemSeparator = () => <View style={style.sepHorizontal} />;
@@ -50,7 +50,7 @@ const List = ({movieList, isLoading, title, id}: ListProps) => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item, index}) => (
               <TouchableWithoutFeedback
-                onPress={() => navigation.navigate('Movie', {id: item?.id})}>
+                onPress={() => navigation.navigate('Movie', {id: item?.id, title})}>
                 <ImageBackground
                   style={style.poster}
                   source={{
@@ -117,7 +117,7 @@ const List = ({movieList, isLoading, title, id}: ListProps) => {
   );
 };
 
-export default memo(List);
+export default List;
 
 const style = StyleSheet.create({
   title: {

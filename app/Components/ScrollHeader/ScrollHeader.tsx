@@ -1,15 +1,23 @@
-import React, {memo, useEffect, useRef, useState} from 'react';
-import {FlatList, Image, StyleSheet, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {getTrendingAllStart} from '../../shared/actions/genreActions';
 import {useDispatch, useSelector} from 'react-redux';
 import {ShimmerPlaceholderComp} from '../Seperator/Shimmer';
 import {hp, wp} from '../../shared/utils/responsiv';
+import { useNavigation } from '@react-navigation/native';
 
 const ScrollHeader = () => {
   const dispatch = useDispatch();
   const {trendingAll, isTrendingAllLoading} = useSelector(
     state => state?.moviesList,
   );
+  const navigation = useNavigation();
 
   useEffect(() => {
     dispatch(getTrendingAllStart());
@@ -44,7 +52,7 @@ const ScrollHeader = () => {
     <>
       {isTrendingAllLoading ? (
         <ShimmerPlaceholderComp
-          length={10}
+          length={1}
           style={style.sliderShimm}
           shimDirection={style.shimDirection}
         />
@@ -62,7 +70,8 @@ const ScrollHeader = () => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item, index}) => {
               return (
-                <>
+                <TouchableWithoutFeedback
+                  onPress={() => navigation.navigate('Movie', {id: item?.id})}>
                   <Image
                     style={style.slider}
                     source={{
@@ -71,7 +80,7 @@ const ScrollHeader = () => {
                         : item?.url,
                     }}
                   />
-                </>
+                </TouchableWithoutFeedback>
               );
             }}
           />
@@ -81,7 +90,7 @@ const ScrollHeader = () => {
   );
 };
 
-export default memo(ScrollHeader);
+export default ScrollHeader;
 
 const style = StyleSheet.create({
   slider: {
@@ -107,6 +116,6 @@ const style = StyleSheet.create({
   },
   shimDirection: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
   },
 });

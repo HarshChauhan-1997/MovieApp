@@ -1,7 +1,9 @@
 import axios from 'axios';
 import {headers} from '../../../setup_api';
-import {Genres} from '../Types/Types';
 import _ from 'lodash';
+
+// hrb_2002
+// Beast@1805
 
 const getGenre = async () => {
   return await axios.get(
@@ -74,15 +76,6 @@ const getDataBySearch = async (data: string) => {
   );
 };
 
-const getMoviesByID = async (id: number) => {
-  return await axios.get(
-    `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
-    {
-      headers,
-    },
-  );
-};
-
 export const genreApi = {
   getGenre,
   getTrendingMovies,
@@ -90,5 +83,4 @@ export const genreApi = {
   getTrendingSeries,
   getMoviesByGenres,
   getDataBySearch,
-  getMoviesByID,
 };
